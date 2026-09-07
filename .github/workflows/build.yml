@@ -1,24 +1,24 @@
 name: Build Spotifilable.exe
-
+ 
 on:
   workflow_dispatch:      # "Run workflow" button in the Actions tab
   push:
     branches: [ main ]
-
+ 
 jobs:
   build-windows-exe:
     runs-on: windows-latest    # a real Windows machine, provided free by GitHub
-
+ 
     steps:
       - uses: actions/checkout@v4
-
+ 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
+ 
       - name: Install dependencies
         run: pip install -r requirements.txt pyinstaller
-
+ 
       - name: Build the .exe
         run: |
           pyinstaller --onefile --windowed --icon=icon.ico --name Spotifilable `
@@ -26,8 +26,12 @@ jobs:
             --collect-all spotdl `
             --collect-all yt_dlp `
             --collect-all ytmusicapi `
+            --collect-all pykakasi `
+            --collect-all rapidfuzz `
+            --collect-all soundcloud `
+            --collect-all bandcamp_api `
             spotifilable.py
-
+ 
       - name: Upload Spotifilable.exe
         uses: actions/upload-artifact@v4
         with:
